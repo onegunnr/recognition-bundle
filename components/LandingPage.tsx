@@ -1,27 +1,9 @@
 import React, { useState } from 'react';
-import { Mail, Headphones, Smartphone, FileText, ArrowRight, ShieldCheck, Loader2 } from 'lucide-react';
+import { Mail, Headphones, Smartphone, FileText, ArrowRight, ShieldCheck } from 'lucide-react';
 import Footer from './Footer';
 
 const LandingPage: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulating an API call to an email provider (e.g., ConvertKit or Mailchimp)
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
-    
-    const successElement = document.getElementById('success-message');
-    if (successElement) {
-      successElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   // Serene ocean horizon
   const bgImage = "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=2000&auto=format&fit=crop";
@@ -67,65 +49,43 @@ const LandingPage: React.FC = () => {
             
             <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#c5a059]/10 blur-[60px] rounded-full"></div>
 
-            {!submitted ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6 text-left relative z-10">
-                <div className="space-y-3">
-                  <label htmlFor="email" className="text-[10px] font-bold tracking-[0.3em] text-[#c5a059] uppercase ml-1 opacity-80">Digital Delivery Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600 w-5 h-5" />
-                    <input
-                      type="email"
-                      id="email"
-                      required
-                      disabled={isSubmitting}
-                      placeholder="Enter your best email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-black/60 border border-white/5 text-stone-100 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c5a059]/30 focus:border-[#c5a059]/40 transition-all placeholder:text-stone-700 disabled:opacity-50"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#c5a059] hover:bg-[#d4b471] disabled:bg-stone-700 text-stone-950 font-bold py-5 px-6 rounded-2xl transition-all duration-500 transform hover:scale-[1.01] flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(197,160,89,0.1)] group"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Sending Invitation...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-lg">Unlock The Bundle</span>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
-                </button>
-
-                <div className="flex items-center justify-center gap-2 text-[9px] text-stone-600 uppercase tracking-[0.2em]">
-                  <ShieldCheck className="w-3 h-3" />
-                  <span>Privacy First • Infinite Freedom</span>
-                </div>
-              </form>
-            ) : (
-              <div id="success-message" className="text-center py-8 animate-fade-in relative z-10">
-                <div className="w-16 h-16 bg-[#c5a059]/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#c5a059]/20 shadow-inner">
-                  <Mail className="text-[#c5a059] w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-serif text-white mb-3">Verification Sent</h3>
-                <p className="text-stone-400 text-base leading-relaxed font-light">
-                  A magic link is flying to <span className="text-[#c5a059] font-medium">{email}</span>.<br/>
-                  Confirm it to reveal your downloads.
-                </p>
-                <div className="mt-6 pt-6 border-t border-white/5">
-                   <p className="text-[10px] text-stone-500 uppercase tracking-widest leading-relaxed">
-                     Don't see it? Check your spam folder or <button onClick={() => setSubmitted(false)} className="text-[#c5a059] underline decoration-[#c5a059]/30 underline-offset-4">try another email</button>.
-                   </p>
+            <form 
+              action="https://app.kit.com/forms/8885579/subscriptions" 
+              method="post"
+              data-sv-form="8885579"
+              data-uid="c72c5dda94"
+              className="flex flex-col gap-6 text-left relative z-10"
+            >
+              <div className="space-y-3">
+                <label htmlFor="email_address" className="text-[10px] font-bold tracking-[0.3em] text-[#c5a059] uppercase ml-1 opacity-80">Digital Delivery Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600 w-5 h-5" />
+                  <input
+                    type="email"
+                    id="email_address"
+                    name="email_address"
+                    required
+                    placeholder="Enter your best email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-black/60 border border-white/5 text-stone-100 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c5a059]/30 focus:border-[#c5a059]/40 transition-all placeholder:text-stone-700"
+                  />
                 </div>
               </div>
-            )}
+
+              <button
+                type="submit"
+                className="w-full bg-[#c5a059] hover:bg-[#d4b471] text-stone-950 font-bold py-5 px-6 rounded-2xl transition-all duration-500 transform hover:scale-[1.01] flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(197,160,89,0.1)] group"
+              >
+                <span className="text-lg">Unlock The Bundle</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <div className="flex items-center justify-center gap-2 text-[9px] text-stone-600 uppercase tracking-[0.2em]">
+                <ShieldCheck className="w-3 h-3" />
+                <span>Privacy First • Infinite Freedom</span>
+              </div>
+            </form>
           </div>
 
           <div className="mt-24 grid gap-16 text-left md:grid-cols-3 w-full max-w-5xl">
