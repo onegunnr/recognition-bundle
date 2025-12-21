@@ -1,12 +1,41 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, Headphones, Smartphone, FileText, ArrowRight, ShieldCheck } from 'lucide-react';
 import Footer from './Footer';
 
 const LandingPage: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   // Serene ocean horizon
   const bgImage = "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=2000&auto=format&fit=crop";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('email_address', email);
+
+      await fetch('https://app.kit.com/forms/8885579/subscriptions', {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // Kit doesn't support CORS, so we use no-cors
+      });
+
+      // Navigate to thank-you page (SPA navigation, no reload)
+      navigate('/thank-you');
+    } catch (error) {
+      console.error('Form submission error:', error);
+      // Still navigate - the form likely submitted successfully
+      // (no-cors mode doesn't return response status)
+      navigate('/thank-you');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-stone-200 selection:bg-[#c5a059]/30 relative font-sans overflow-x-hidden">
@@ -50,10 +79,7 @@ const LandingPage: React.FC = () => {
             <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#c5a059]/10 blur-[60px] rounded-full"></div>
 
             <form 
-              action="https://app.kit.com/forms/8885579/subscriptions" 
-              method="post"
-              data-sv-form="8885579"
-              data-uid="c72c5dda94"
+              onSubmit={handleSubmit}
               className="flex flex-col gap-6 text-left relative z-10"
             >
               <div className="space-y-3">
@@ -68,17 +94,21 @@ const LandingPage: React.FC = () => {
                     placeholder="Enter your best email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-black/60 border border-white/5 text-stone-100 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c5a059]/30 focus:border-[#c5a059]/40 transition-all placeholder:text-stone-700"
+                    disabled={isSubmitting}
+                    className="w-full bg-black/60 border border-white/5 text-stone-100 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c5a059]/30 focus:border-[#c5a059]/40 transition-all placeholder:text-stone-700 disabled:opacity-50"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#c5a059] hover:bg-[#d4b471] text-stone-950 font-bold py-5 px-6 rounded-2xl transition-all duration-500 transform hover:scale-[1.01] flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(197,160,89,0.1)] group"
+                disabled={isSubmitting}
+                className="w-full bg-[#c5a059] hover:bg-[#d4b471] text-stone-950 font-bold py-5 px-6 rounded-2xl transition-all duration-500 transform hover:scale-[1.01] flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(197,160,89,0.1)] group disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                <span className="text-lg">Unlock The Bundle</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="text-lg">
+                  {isSubmitting ? 'Sending...' : 'Unlock The Bundle'}
+                </span>
+                {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
               </button>
 
               <div className="flex items-center justify-center gap-2 text-[9px] text-stone-600 uppercase tracking-[0.2em]">
@@ -119,8 +149,7 @@ const LandingPage: React.FC = () => {
                {[
                  { step: "I", label: "Intent" },
                  { step: "II", label: "Verify" },
-                 { step: "III", label: "Receive" },
-                 { step: "IV", label: "Embody" }
+                 { step: "III", label: "Embody" },
                ].map((item, i) => (
                  <div key={i} className="flex flex-col items-center gap-3">
                    <span className="text-3xl font-serif text-[#c5a059] italic">{item.step}</span>
