@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import ConfirmedPage from './components/ConfirmedPage';
+import ThankYouPage from './components/ThankYouPage';
 
 /**
  * README FOR DEVELOPER:
@@ -27,6 +28,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/confirmed" element={<ConfirmedPage />} />
+            <Route path="/thank-you" element={<ThankYouPage />} />
             {/* Redirect unknown routes back to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
